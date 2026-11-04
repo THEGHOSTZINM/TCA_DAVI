@@ -19,6 +19,7 @@ CREATE TABLE jogos (
     descricao TEXT,
     ano_lancamento INT,
     id_genero INT NOT NULL,
+
     FOREIGN KEY (id_genero) REFERENCES generos(id_genero)
 );
 
@@ -27,9 +28,7 @@ CREATE TABLE jogos_plataformas (
     id_plataforma INT,
 
     PRIMARY KEY (id_jogo, id_plataforma),
-
     FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
-
     FOREIGN KEY (id_plataforma) REFERENCES plataformas(id_plataforma)
 );
 
@@ -43,11 +42,8 @@ CREATE TABLE biblioteca (
         'Concluído',
         'Jogando',
         'Quero Jogar'
-        
-        )
-    ),
+    )),
 
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-
     FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo)
 );
