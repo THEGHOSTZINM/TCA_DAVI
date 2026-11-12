@@ -17,9 +17,16 @@ CREATE TABLE jogos (
     id_jogo INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
-    ano_lancamento INT,
+    desenvolvedora VARCHAR(100) NOT NULL,
+    ano_lancamento INT
+);
+
+CREATE TABLE jogos_generos (
+    id_jogo INT NOT NULL,
     id_genero INT NOT NULL,
 
+    PRIMARY KEY (id_jogo, id_genero),
+    FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
     FOREIGN KEY (id_genero) REFERENCES generos(id_genero)
 );
 
@@ -37,13 +44,15 @@ CREATE TABLE biblioteca (
     id_usuario INT NOT NULL,
     id_jogo INT NOT NULL,
     status VARCHAR(30) NOT NULL,
+    
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
+
     UNIQUE (id_usuario, id_jogo),
+
     CHECK (status IN (
         'Concluído',
         'Jogando',
         'Quero Jogar'
-    )),
-
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
-    FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo)
+    ))
 );
