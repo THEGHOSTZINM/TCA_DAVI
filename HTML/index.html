@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca de Jogos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header>
+  <h1>BIBLIOTECA <span>DE JOGOS</span></h1>
+  <div id="conta"></div>
+</header>
+
+<section id="login" class="caixa">
+  <h2 id="titulo-login">Entrar</h2>
+  <p id="msg" class="aviso"></p>
+  <input id="nome-usuario" placeholder="Seu nome" maxlength="100">
+  <button id="btn-entrar" class="primario">Entrar</button>
+  <p class="troca"><span id="pergunta">Não tem uma conta?</span> <a href="#" id="trocar">Clique aqui para criar</a></p>
+</section>
+
+<main id="app" hidden>
+  <nav>
+    <button class="aba ativa" data-aba="catalogo">Catálogo</button>
+    <button class="aba" data-aba="minha">Minha biblioteca</button>
+    <button id="btn-novo" class="primario">+ Adicionar jogo</button>
+  </nav>
+  <div class="filtros">
+    <input id="busca" placeholder="Buscar por nome ou desenvolvedora...">
+    <select id="f-genero"><option value="">Todos os gêneros</option></select>
+    <select id="f-status" hidden>
+      <option value="">Todos os status</option>
+      <option>Jogando</option><option>Quero Jogar</option><option>Concluído</option>
+    </select>
+  </div>
+  <div id="lista" class="grade"></div>
+</main>
+
+<dialog id="modal">
+  <form id="form-jogo" method="dialog">
+    <h2>Adicionar jogo</h2>
+    <label>Nome <input name="nome" required maxlength="150"></label>
+    <label>Sinopse <textarea name="descricao" rows="3" required></textarea></label>
+    <label>Gênero <select name="id_genero" required></select></label>
+    <label>Quem criou (desenvolvedora) <input name="desenvolvedora" required maxlength="100"></label>
+    <label>Ano de lançamento <input name="ano_lancamento" type="number" min="1950" max="2100" required></label>
+    <div class="acoes">
+      <button type="button" id="cancelar">Cancelar</button>
+      <button class="primario">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="env.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
