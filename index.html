@@ -1,61 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biblioteca de Jogos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca de Jogos | TCA</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header>
-  <h1>BIBLIOTECA <span>DE JOGOS</span></h1>
-  <div id="conta"></div>
-</header>
-
-<section id="login" class="caixa">
-  <h2 id="titulo-login">Entrar</h2>
-  <p id="msg" class="aviso"></p>
-  <input id="nome-usuario" placeholder="Seu nome" maxlength="100">
-  <button id="btn-entrar" class="primario">Entrar</button>
-  <p class="troca"><span id="pergunta">Não tem uma conta?</span> <a href="#" id="trocar">Clique aqui para criar</a></p>
-</section>
-
-<main id="app" hidden>
-  <nav>
-    <button class="aba ativa" data-aba="catalogo">Catálogo</button>
-    <button class="aba" data-aba="minha">Minha biblioteca</button>
-    <button id="btn-novo" class="primario">+ Adicionar jogo</button>
-  </nav>
-  <div class="filtros">
-    <input id="busca" placeholder="Buscar por nome ou desenvolvedora...">
-    <select id="f-genero"><option value="">Todos os gêneros</option></select>
-    <select id="f-status" hidden>
-      <option value="">Todos os status</option>
-      <option>Jogando</option><option>Quero Jogar</option><option>Concluído</option>
-    </select>
-  </div>
-  <div id="lista" class="grade"></div>
-</main>
-
-<dialog id="modal">
-  <form id="form-jogo" method="dialog">
-    <h2>Adicionar jogo</h2>
-    <label>Nome <input name="nome" required maxlength="150"></label>
-    <label>Sinopse <textarea name="descricao" rows="3" required></textarea></label>
-    <label>Gênero <select name="id_genero" required></select></label>
-    <label>Quem criou (desenvolvedora) <input name="desenvolvedora" required maxlength="100"></label>
-    <label>Ano de lançamento <input name="ano_lancamento" type="number" min="1950" max="2100" required></label>
-    <div class="acoes">
-      <button type="button" id="cancelar">Cancelar</button>
-      <button class="primario">Salvar</button>
+  <header class="topo">
+    <h1>BIBLIOTECA <span>DE JOGOS</span></h1>
+    <div class="conta">
+      <span class="etiqueta">CONECTADO AO SUPABASE</span>
+      <span id="boas-vindas"></span>
+      <button id="btn-sair" type="button" hidden>Sair</button>
     </div>
-  </form>
-</dialog>
+  </header>
 
-<script src="env.js"></script>
-<script src="script.js"></script>
+  <section id="tela-login" class="painel-login">
+    <h2 id="titulo-login">Entrar</h2>
+    <p class="subtitulo">Entre com seu nome ou crie uma conta.</p>
+    <form id="form-login">
+      <label for="nome-usuario">Nome do usuário</label>
+      <input id="nome-usuario" type="text" maxlength="100" autocomplete="off" placeholder="Ex.: Davi" required>
+      <p id="mensagem-login" class="erro" role="status"></p>
+      <button class="primario" type="submit" id="btn-entrar">Entrar</button>
+    </form>
+    <p class="ajuda"><span id="texto-troca">Não tem conta?</span> <button id="btn-trocar" class="link" type="button">Criar uma conta</button></p>
+    <p class="dica">Projeto escolar: o acesso pelo nome não tem senha e não protege contas privadas.</p>
+  </section>
+
+  <main id="aplicativo" hidden>
+    <nav class="abas" aria-label="Navegação principal">
+      <button id="aba-catalogo" class="aba ativa" type="button">Catálogo</button>
+      <button id="aba-biblioteca" class="aba" type="button">Minha biblioteca</button>
+      <button id="btn-cadastrar" class="primario" type="button">+ Cadastrar jogo</button>
+    </nav>
+
+    <div class="cabecalho-pagina">
+      <div>
+        <h2 id="titulo-pagina">Catálogo</h2>
+        <p id="descricao-pagina">Descubra jogos e adicione à sua biblioteca pessoal.</p>
+      </div>
+      <div class="numeros">
+        <div><strong id="total-catalogo">0</strong><span>No catálogo</span></div>
+        <div><strong id="total-biblioteca">0</strong><span>Na biblioteca</span></div>
+      </div>
+    </div>
+
+    <section class="filtros" aria-label="Filtros de jogos">
+      <label>Pesquisar
+        <input id="campo-busca" type="search" placeholder="Nome ou desenvolvedora...">
+      </label>
+      <label>Gênero
+        <select id="filtro-genero"><option value="">Todos os gêneros</option></select>
+      </label>
+      <label>Plataforma
+        <select id="filtro-plataforma"><option value="">Todas as plataformas</option></select>
+      </label>
+      <button id="btn-limpar" type="button">Limpar filtros</button>
+    </section>
+
+    <p id="resultado-filtro" class="resultado" role="status"></p>
+    <section id="catalogo" class="grade" aria-label="Jogos do catálogo"></section>
+    <section id="biblioteca" class="secoes" hidden aria-label="Jogos da minha biblioteca"></section>
+
+    <div class="rodape-demo">
+      <p><strong>Catálogo compartilhado:</strong> os jogos ficam salvos no Supabase e aparecem para todos os usuários.</p>
+      <p>Cada nome tem uma biblioteca própria. Este login de demonstração não verifica a identidade de quem entra.</p>
+      <button id="btn-reiniciar" type="button">Atualizar jogos</button>
+    </div>
+  </main>
+
+  <dialog id="modal-jogo">
+    <form id="form-jogo">
+      <h2 id="titulo-modal">Cadastrar jogo</h2>
+      <p class="subtitulo">O jogo aparecerá no catálogo compartilhado do Supabase.</p>
+      <p id="mensagem-jogo" class="erro" role="status"></p>
+      <label>Nome do jogo<input name="nome" maxlength="150" required></label>
+      <label>Descrição<textarea name="descricao" rows="3" required></textarea></label>
+      <label>Desenvolvedora<input name="desenvolvedora" maxlength="100" required></label>
+      <label>Ano de lançamento<input name="ano" type="number" min="1950" max="2100" required></label>
+      <label>Gênero principal<select name="genero" required></select></label>
+      <fieldset>
+        <legend>Plataformas (escolha uma ou mais)</legend>
+        <div id="opcoes-plataformas" class="opcoes-plataformas"></div>
+      </fieldset>
+      <label id="campo-status-inicial">Adicionar à minha biblioteca como
+        <select name="status">
+          <option value="">Não adicionar agora</option>
+          <option value="Concluído">Concluído</option>
+          <option value="Jogando">Jogando</option>
+          <option value="Quero Jogar">Quero Jogar</option>
+        </select>
+      </label>
+      <div class="acoes">
+        <button id="btn-cancelar" type="button">Cancelar</button>
+        <button id="btn-salvar-jogo" type="submit" class="primario">Salvar jogo</button>
+      </div>
+    </form>
+  </dialog>
+
+  <p id="aviso" class="aviso" hidden role="status"></p>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="env.js"></script>
+  <script type="module" src="js/principal.js"></script>
 </body>
 </html>
