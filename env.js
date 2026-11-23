@@ -1,5 +1,6 @@
-// Coloque aqui SOMENTE as credenciais públicas do novo projeto Supabase.
 const config = {
-    url: 'https://tuixvwjsydbhorugqjtn.supabase.co',
-    publishableKey: 'sb_publishable_wfxWVFOhUDOD-Cv5aIdmSQ_nKV2NWNR'
+    url: 'https://iidvrgrgwflpnsupfaeu.supabase.co',
+    publishableKey: 'sb_publishable_GF5_LBep52YEYl2dZOHwAw_qYPcRxX2',
+    email: 'emaillegal10@gmail.com',
+    senha: 'solidsnake'
 };
