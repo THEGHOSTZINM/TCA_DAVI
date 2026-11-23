@@ -1,6 +1,6 @@
 CREATE TABLE usuarios (
     id_usuario INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL
+    nome VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE generos (
@@ -18,7 +18,9 @@ CREATE TABLE jogos (
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     desenvolvedora VARCHAR(100) NOT NULL,
-    ano_lancamento INT
+    ano_lancamento INT,
+    id_usuario_criador INT,
+    FOREIGN KEY (id_usuario_criador) REFERENCES usuarios(id_usuario)
 );
 
 CREATE TABLE jogos_generos (

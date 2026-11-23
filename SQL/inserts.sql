@@ -32,14 +32,17 @@ INSERT INTO jogos (nome, descricao, desenvolvedora, ano_lancamento) VALUES
 );
 
 INSERT INTO jogos_generos (id_jogo, id_genero) VALUES
-(1, 1),
 (1, 2),
-(2, 1),
-(2, 2);
+(2, 3);
 
 INSERT INTO usuarios (nome) VALUES
-('Davi');
+('Davi'),
+('Fabiano');
 
 INSERT INTO biblioteca (id_usuario, id_jogo, status) VALUES
-(1, 1, 'Jogando'),
-(1, 2, 'Concluído');
+(1, 1, 'Jogando'), (1, 2, 'Concluído'),
+(2, 1, 'Quero Jogar'), (2, 2, 'Jogando');
+
+INSERT INTO jogos_plataformas (id_jogo, id_plataforma) VALUES
+(1, 1), (1, 2), (1, 3),
+(2, 1), (2, 2), (2, 3);
