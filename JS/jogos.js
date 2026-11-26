@@ -11,13 +11,12 @@ export async function buscarCatalogo() {
     let jogos = verificar(await banco.from('jogos').select('*').order('nome'));
     let generos = verificar(await banco.from('generos').select('*').order('nome'));
     let plataformas = verificar(await banco.from('plataformas').select('*').order('nome'));
-    let jogosGeneros = verificar(await banco.from('jogos_generos').select('*'));
     let jogosPlataformas = verificar(await banco.from('jogos_plataformas').select('*'));
 
     let lista = [];
 
     jogos.forEach(function(jogo) {
-        let nomeGenero = buscarGenero(jogo.id_jogo, generos, jogosGeneros);
+        let nomeGenero = buscarGenero(jogo.id_genero, generos);
         let plataformasJogo = buscarPlataformas(jogo.id_jogo, plataformas, jogosPlataformas);
 
         lista.push({
@@ -37,15 +36,8 @@ export async function buscarCatalogo() {
 
 // busca o gênero de um jogo
 
-function buscarGenero(idJogo, generos, jogosGeneros) {
-    let idGenero = null;
+function buscarGenero(idGenero, generos) {
     let nomeGenero = 'Sem gênero';
-
-    jogosGeneros.forEach(function(relacao) {
-        if (relacao.id_jogo === idJogo && idGenero === null) {
-            idGenero = relacao.id_genero;
-        }
-    });
 
     generos.forEach(function(genero) {
         if (genero.id_genero === idGenero) {
@@ -106,7 +98,8 @@ export async function salvarJogoBanco(jogo, plataformasEscolhidas, editando, idU
         nome: jogo.nome,
         descricao: jogo.descricao,
         desenvolvedora: jogo.desenvolvedora,
-        ano_lancamento: jogo.ano
+        ano_lancamento: jogo.ano,
+        id_genero: jogo.idGenero
     };
 
     let idJogo;
@@ -135,12 +128,6 @@ export async function salvarJogoBanco(jogo, plataformasEscolhidas, editando, idU
 
         idJogo = resposta.data.id_jogo;
 
-        let apagarGenero = await banco.from('jogos_generos')
-            .delete()
-            .eq('id_jogo', idJogo);
-
-        if (apagarGenero.error) throw apagarGenero.error;
-
         let apagarPlataformas = await banco.from('jogos_plataformas')
             .delete()
             .eq('id_jogo', idJogo);
@@ -148,22 +135,14 @@ export async function salvarJogoBanco(jogo, plataformasEscolhidas, editando, idU
         if (apagarPlataformas.error) throw apagarPlataformas.error;
     }
 
-    await salvarRelacoes(idJogo, jogo.idGenero, plataformasEscolhidas);
+    await salvarRelacoes(idJogo, plataformasEscolhidas);
 
     return idJogo;
 }
 
-// salva o gênero e as plataformas do jogo cadastrado/editado
+// salva as plataformas do jogo cadastrado/editado
 
-async function salvarRelacoes(idJogo, idGenero, plataformasEscolhidas) {
-    let respostaGenero = await banco.from('jogos_generos')
-        .insert({
-            id_jogo: idJogo,
-            id_genero: idGenero
-        });
-
-    if (respostaGenero.error) throw respostaGenero.error;
-
+async function salvarRelacoes(idJogo, plataformasEscolhidas) {
     let relacoes = [];
 
     plataformasEscolhidas.forEach(function(idPlataforma) {

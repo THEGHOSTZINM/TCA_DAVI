@@ -13,6 +13,7 @@ let plataformas = [];
 let aba = 'catalogo';
 let criandoConta = false;
 let editando = null;
+let salvandoJogo = false;
 
 // pega um elemento do HTML pelo ID
 
@@ -110,7 +111,6 @@ function sair() {
     mostrar();
 }
 
-
 // Biblioteca do usuário
 
 // adiciona, altera ou remove um jogo da biblioteca
@@ -133,7 +133,6 @@ async function mudarStatus(idJogo, status) {
     }
 }
 
-
 // Cadastro de jogos
 
 // abre a janela para cadastrar um novo jogo
@@ -149,7 +148,6 @@ function abrirCadastro() {
 
     pegar('modal-jogo').showModal();
 }
-
 
 // Edição de jogos
 
@@ -213,7 +211,6 @@ function abrirEdicao(idJogo) {
     pegar('modal-jogo').showModal();
 }
 
-
 // Salvar jogos
 
 // pega as plataformas marcadas no formulário
@@ -234,6 +231,9 @@ function pegarPlataformasEscolhidas() {
 
 async function salvarJogo(evento) {
     evento.preventDefault();
+
+    // evita dois cadastros quando o botão é clicado várias vezes
+    if (salvandoJogo) return;
 
     let form = pegar('form-jogo');
     let campos = form.elements;
@@ -257,6 +257,9 @@ async function salvarJogo(evento) {
         ano: Number(campos.ano.value),
         idGenero: Number(campos.genero.value)
     };
+
+    salvandoJogo = true;
+    pegar('btn-salvar-jogo').disabled = true;
 
     try {
 
@@ -295,6 +298,9 @@ async function salvarJogo(evento) {
 
     } catch (erro) {
         pegar('mensagem-jogo').textContent = 'Erro: ' + erro.message;
+    } finally {
+        salvandoJogo = false;
+        pegar('btn-salvar-jogo').disabled = false;
     }
 }
 

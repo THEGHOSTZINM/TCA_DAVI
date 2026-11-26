@@ -18,23 +18,17 @@ CREATE TABLE jogos (
     nome VARCHAR(150) NOT NULL,
     descricao TEXT,
     desenvolvedora VARCHAR(100) NOT NULL,
-    ano_lancamento INT,
+    ano_lancamento INT CHECK (ano_lancamento BETWEEN 1950 AND 2100),
     id_usuario_criador INT,
-    FOREIGN KEY (id_usuario_criador) REFERENCES usuarios(id_usuario)
-);
-
-CREATE TABLE jogos_generos (
-    id_jogo INT NOT NULL,
     id_genero INT NOT NULL,
 
-    PRIMARY KEY (id_jogo, id_genero),
-    FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
+    FOREIGN KEY (id_usuario_criador) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_genero) REFERENCES generos(id_genero)
 );
 
 CREATE TABLE jogos_plataformas (
-    id_jogo INT,
-    id_plataforma INT,
+    id_jogo INT NOT NULL,
+    id_plataforma INT NOT NULL,
 
     PRIMARY KEY (id_jogo, id_plataforma),
     FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
@@ -46,11 +40,10 @@ CREATE TABLE biblioteca (
     id_usuario INT NOT NULL,
     id_jogo INT NOT NULL,
     status VARCHAR(30) NOT NULL,
-    
+    UNIQUE (id_usuario, id_jogo),
+
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_jogo) REFERENCES jogos(id_jogo),
-
-    UNIQUE (id_usuario, id_jogo),
 
     CHECK (status IN (
         'Concluído',
